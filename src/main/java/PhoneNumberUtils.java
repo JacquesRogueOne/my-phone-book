@@ -14,12 +14,14 @@ public class PhoneNumberUtils {
     }
 
     private Map<String, Integer> combine(Map<String, Integer> chunk1, Map<String, Integer> chunk2) {
-        chunk2.forEach(chunk1::putIfAbsent);
-        return chunk1;
+        HashMap<String, Integer> hashMap = new HashMap<>(chunk1);
+        chunk2.forEach((s, integer) -> hashMap.merge(s, integer, Integer::sum));
+        return hashMap;
     }
 
     private Map<String, Integer> accumulate(Map<String, Integer> accumulator, String phoneNumber) {
-        accumulator.compute(phoneNumber, (phone, occurrence) -> occurrence == null ? 1 : occurrence + 1);
-        return accumulator;
+        Map<String, Integer> stringIntegerMap = new HashMap<>(accumulator);
+        stringIntegerMap.compute(phoneNumber, (phone, occurrence) -> occurrence == null ? 1 : occurrence + 1);
+        return stringIntegerMap;
     }
 }
